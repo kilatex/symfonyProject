@@ -34,19 +34,19 @@ prepare:
 	${MAKE} composer-install
 
 composer-install:
-	U_ID= ${UID} docker exec --user ${UID} -it ${DOCKER_BE} composer install --no-scripts --no-interaction --optimize-autoloader
+	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} composer install --no-scripts --no-interaction --optimize-autoloader
 
 migrations:
-	U_ID= ${UID} docker exec -it --user ${UID} -${DOCKER_BE} bin/console doctrine:migrations:migrate -n
+	U_ID=${UID} docker exec -it --user ${UID} -${DOCKER_BE} bin/console doctrine:migrations:migrate -n
 
 be-logs:
-	U_ID= ${UID} docker exec -it --user ${UID} ${DOCKER_BE} tail -f var/log/dev.log
+	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} tail -f var/log/dev.log
 
 ssh-be:
-	U_ID = ${UID} docker exec -it --user ${UID} ${DOCKER_BE} bash
+	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} bash
 
 code-style:
-	U_ID = ${UID} docker exec -it --user ${UID} ${DOCKER_BE} php-cs-fixer fix src --rules=@Symfony
+	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} php-cs-fixer fix src --rules=@Symfony
 
 generate-ssh-keys: ## Generates SSH keys for the JWT library
 	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} mkdir -p config/jwt
