@@ -1,0 +1,16 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $mailerDefaultSender: '%env(string:MAILER_DEFAULT_SENDER)%'
+            $host: '%env(string:HOST)%'
+    Mailer\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+

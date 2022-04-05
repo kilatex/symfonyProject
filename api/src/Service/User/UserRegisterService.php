@@ -6,20 +6,28 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Exception\User\UserAlreadyExistException;
+use App\Messenger\Message\UserRegisterMessage;
+use App\Messenger\RoutingKey;
 use App\Repository\UserRepository;
 use App\Service\Password\EncoderService;
 use App\Service\Request\RequestService;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
+
 class UserRegisterService {
 
     private UserRepository $userRepository;
     private EncoderService $encoderService;
-
-    public function __construct(UserRepository $userRepository, EncoderService $encoderService)
+    private MessageBusInterface $messageBusInterface;
+    public function __construct(UserRepository $userRepository, EncoderService $encoderService, MessageBusInterface $messageBusInterface)
     {       
         $this->userRepository = $userRepository;
         $this->encoderService = $encoderService;
+        $this->messageBusInterface = $messageBusInterface;
+        
     }
     
     public function create(Request $request){
@@ -36,6 +44,15 @@ class UserRegisterService {
             throw UserAlreadyExistException::fromEmail($email);
         }
 
+        $this->messageBusInterface->dispatch(
+            new UserRegisterMessage($user->getId(),$user->getName(),$user->getEmail(),$user->getToken()),
+            [new AmqpStamp(RoutingKey::USER_QUEUE)]
+        );
+        
         return $user;
+
+    
+    
     }
+
 }

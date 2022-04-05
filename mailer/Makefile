@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-DOCKER_BE = symfony-api-platform-be
+DOCKER_BE = symfony-api-platform-mailer
 OS := $(shell uname)
 
 ifeq ($(OS),Darwin)
@@ -47,10 +47,4 @@ ssh-be:
 
 code-style:
 	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} php-cs-fixer fix src --rules=@Symfony
-
-generate-ssh-keys: ## Generates SSH keys for the JWT library
-	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} mkdir -p config/jwt
-	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} openssl genrsa -passout pass:b905059005846ad2b2762dcf065fadfb -out config/jwt/private.pem -aes256 4096
-	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} openssl rsa -pubout -passin pass:b905059005846ad2b2762dcf065fadfb -in config/jwt/private.pem -out config/jwt/public.pem
-
 

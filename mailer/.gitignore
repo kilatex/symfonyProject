@@ -8,20 +8,9 @@
 /var/
 /vendor/
 
-.phpunit.result.cache
-/phpunit.xml
 
 ### OTHER FILES AND FOLDERS ###
 .idea
 .php_cs_cache
 .DS_store
 .docker-compose.yml
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
-
-###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
-###< lexik/jwt-authentication-bundle ###
