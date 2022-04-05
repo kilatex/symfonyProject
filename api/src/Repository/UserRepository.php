@@ -25,6 +25,16 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
+    public function findOneInactiveByIdAndTokenOrFail(string $id, string $token)
+    {
+        if( null == $user =  
+        $this->objectRepository->findOneBy(['id' => $id, 'token' => $token, 'active' => false])){
+            throw UserNotFoundException::fromUserIdAndToken($id,$token);
+        }
+
+        return $user;
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException
